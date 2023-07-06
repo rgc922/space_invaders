@@ -8,14 +8,14 @@ FONT = ("Courier", 24, "normal")
 
 class Scoreboard(Turtle):
 
-    def __init__(self, high_score):
+    def __init__(self):
         super().__init__()
         self.current_score = 0
 
         with open ("high_file.txt", mode="r+") as high_file:
             high_score_file = high_file.read()
 
-        print("High Score print", high_score_file)
+        # print("High Score print", high_score_file)
 
         if high_score_file == '':
             high_score_file = 0

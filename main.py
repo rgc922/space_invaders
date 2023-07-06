@@ -17,10 +17,10 @@ screen.title("Space Invaders RGC")
 screen.tracer(0)
 
 
-def invader_shot(position):
+def invader_shot(position, probability):
     global invader_shot_list
     
-    if randint(0, 130) == 0:
+    if randint(0, probability) == 0:
         invader_shot_list.append(ShotInvader(position))
 
 
@@ -40,16 +40,6 @@ def new_shot():
         shot_list.append(new_shot)
 
         temp_date = datetime.datetime.now()
-
-
-
-
-high_score = 0
-
-
-
-
-
 
 
 
@@ -109,7 +99,7 @@ def space_game():
             
         game_over.clear()
         game_over.hideturtle()
-        
+
         score.clear()
         score.hideturtle()
     
@@ -117,7 +107,7 @@ def space_game():
         pass
 
 
-    score = Scoreboard(high_score)
+    score = Scoreboard()
 
 
     screen.onkey(ship.go_left, "Left")
@@ -135,6 +125,9 @@ def space_game():
     anima = True
     move_right = 0
 
+    time_sleep = 0.2
+
+    shot_invaders_probability = 120
 
     while game_is_on:
 
@@ -147,8 +140,15 @@ def space_game():
             anima = True
             invader_gif = (invader_gif_2)
         
-
-
+        
+        ### if the user kills all invaders, we generate a new ones to continue the game
+        if len(invaders_list) == 0:
+            # invaders_list = []
+            invaders_list = [(Invader((-340 + itemx * 70, 240 - itemy * 50))) for itemx in range(8) for itemy in range(4)]
+            move_right = 0
+            
+            time_sleep -= 0.05 ### increase game speed
+            shot_invaders_probability -= 10  ### increase the probability for invaders to shot
 
         
 
@@ -169,7 +169,7 @@ def space_game():
 
             #### invaders shot back
             # print(invader.xcor(), invader.ycor())
-            invader_shot((invader.xcor(), invader.ycor()))
+            invader_shot((invader.xcor(), invader.ycor()), shot_invaders_probability)
 
 
             #### move invaders shots
@@ -263,7 +263,7 @@ def space_game():
                     score.increase_score()
         
         screen.update()
-        time.sleep(0.2)
+        time.sleep(time_sleep)
 
 
 space_game()
