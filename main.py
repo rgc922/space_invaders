@@ -2,7 +2,7 @@ from turtle import Screen
 from ship import Ship, ShipLives
 from shot import Shot, ShotInvader
 from invader import Invader
-from scoreboard import Scoreboard
+from scoreboard import Scoreboard, GameOver
 from random import randint
 
 import time
@@ -60,6 +60,8 @@ def space_game():
     global lives
     global temp_date
     global ship
+    global score
+    global game_over
 
     lives = 3
 
@@ -103,15 +105,20 @@ def space_game():
 
     invaders_list = [(Invader((-340 + itemx * 70, 240 - itemy * 50))) for itemx in range(8) for itemy in range(4)]
 
-    ### 
-    try: 
+    try:
+            
+        game_over.clear()
+        game_over.hideturtle()
         
-        score.new_turtle.clear()
-        score.new_turtle.hideturtle()
+        score.clear()
+        score.hideturtle()
+    
     except:
         pass
 
+
     score = Scoreboard(high_score)
+
 
     screen.onkey(ship.go_left, "Left")
     screen.onkey(ship.go_right, "Right")
@@ -139,7 +146,11 @@ def space_game():
         else:
             anima = True
             invader_gif = (invader_gif_2)
+        
 
+
+
+        
 
         #### invaders to left or right
         if move_right < 18:
@@ -203,7 +214,8 @@ def space_game():
                     lives_ship_1.hideturtle()
                 elif lives == 0:
                     game_is_on = False
-                    score.game_over()
+                    # score.game_over()
+                    game_over = GameOver()
                     screen.onkey(space_game, "y")
                     screen.onkey(space_game, "Y")
                     screen.onkey(screen.bye, "n")
